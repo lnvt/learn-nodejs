@@ -28,14 +28,28 @@ class CourseController {
     store(req, res, next) {
         //res.json(req.body)
         const formData = req.body;
+
         const course = new Course(formData);
         course
             .save()
             .then(() => res.redirect('/me/stored/courses'))
-            .catch((error) => {});
-
-        //res.send('COURSE SAVED!')
+            .catch(next);
     }
+    // Course.findOne({})
+    //     .sort({ _id: 'desc' })
+    //     .then(latestCourse => {
+
+    //         //return res.json(latestCourse);
+    //         req.body._id = latestCourse._id + 1;
+    //         const course = new Course(formData);
+    //         course
+    //             .save()
+    //             .then(() => res.redirect('/me/stored/courses'))
+    //             .catch(next);
+
+    //     });
+
+    //res.send('COURSE SAVED!')
 
     //[GET] /course/:id/edit
     edit(req, res, next) {

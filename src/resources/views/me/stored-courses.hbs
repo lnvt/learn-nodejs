@@ -21,14 +21,30 @@
         </div>
 
     </div>
+
+    {{!-- {{_sort.type}} --}}
+
     <table class="table mt-4">
         <thead>
             <tr>
-                <th></th>
-                <th scope="col">#</th>
-                <th scope="col">Tên khoá học</th>
+                <th>#</th>
+                <th scope="col">
+                    ID
+                {{{sortable '_id' _sort}}}
+                </th>
+                <th scope="col">
+                    Tên khoá học    
+                    {{!-- helpers index.js --}}
+                    {{{sortable 'name' _sort}}}
+                    {{!-- <a href="?_sort&column=name&type=desc">
+                        <span class="oi oi-elevator"></span>
+                    </a> --}}
+                </th>
                 <th scope="col">Mô tả khoá học</th>
-                <th scope="col">Thời gian khoá học</th>
+                <th scope="col">
+                    Thời gian khoá học
+                    {{{sortable 'createdAt' _sort}}}
+                </th>
                 <th>Settings</th>
             </tr>
         </thead>
@@ -40,7 +56,7 @@
                         <input class="form-check-input" name="courseIds[]" type="checkbox" value="{{this._id}}">
                     </div>
                 </td>
-                <th scope="row">{{sum @index 1}}</th>
+                <td scope="row">{{this._id}}</td>
                 <td>{{this.name}}</td>
                 <td>{{this.description}}</td>
                 <td>{{this.createdAt}}</td>
