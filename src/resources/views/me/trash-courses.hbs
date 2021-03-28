@@ -1,0 +1,103 @@
+<div class="mt-4">
+    <div>
+        <a href="/me/stored/courses">Danh sách khoá học</a>
+        <h3>Khoá học đã xoá</h3>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Tên khoá học</th>
+                <th scope="col">Mô tả khoá học</th>
+                <th scope="col">Thời gian xoá</th>
+                <th>Settings</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each courses}}
+            <tr>
+                <th scope="row">{{sum @index 1}}</th>
+                <td>{{this.name}}</td>
+                <td>{{this.description}}</td>
+                <td>{{this.deletedAt}}</td>
+                <td>
+                    <a href="" type="button" class="btn btn-warning btn-restore" data-id="{{this._id}}">Restore</a>
+                    <a href="" type="button" class="btn btn-danger" data-id="{{this._id}}" data-toggle="modal"
+                        data-target="#delete-course-model">Destroy</a>
+                </td>
+            </tr>
+
+            {{else}}
+                <tr>
+                    <td colspan="5" class="text-center">
+                        Thùng rác trống.
+                        <a href="/me/stored/courses">Danh sách khoá học.</a>
+                    </td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+
+{{!-- Confirm delete course --}}
+<div id="delete-course-model" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xoá?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắc muốn xoá vĩnh viễn khoá học này, không thể khôi phục?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-delete-course" type="button" class="btn btn-danger">Đồng ý</button>
+                <button  type="button" class="btn btn-default" data-dismiss="modal">Huỷ</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<form name="delete-course-form" method="POST"></form>
+<form name="restore-course-form" method="POST"></form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        
+        var courseID;
+        var deleteForm  = document.forms['delete-course-form'];
+        var restoreForm  = document.forms['delete-course-form'];
+        var btnDeleteCourse = document.getElementById('btn-delete-course');
+        var btnRestoreCourse = $('.btn-restore');
+
+        $('#delete-course-model').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            courseID = button.data('id');
+            //console.log(id);
+
+        })
+        //onsole.log(btnDeleteCourse)
+        btnDeleteCourse.onclick = () =>  {
+            //alert(courseID);
+            deleteForm.action = '/courses/' + courseID + '/force?_method=DELETE';
+            deleteForm.submit();
+        }
+
+        //console.log(btnRestoreCourse);
+        //Restore btn Click
+        btnRestoreCourse.click(function (e) {
+            e.preventDefault();
+            //console.log($(this).data('id'));
+
+            var couseId = $(this).data('id');
+            restoreForm.action = '/courses/' + couseId + '/restore?_method=PATCH';
+            restoreForm.submit();
+
+        });
+    });
+</script>

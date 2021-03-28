@@ -4,8 +4,15 @@ const handlebars = require('express-handlebars');
 const app = express();
 const path = require('path');
 const port = 3000;
-
+const methodOverride = require('method-override');
 const route = require('./routes');
+
+//Connect DB
+const db = require('./config/db');
+db.connect();
+
+//Middle ware
+app.use(methodOverride('_method'));
 
 //Static file: http://localhost:3000/img/logo.png
 app.use(express.static(path.join(__dirname, 'public')));
@@ -27,10 +34,13 @@ app.engine(
     'hbs',
     handlebars({
         extname: '.hbs',
+        helpers: {
+            sum: (a, b) => a + b,
+        },
     }),
 );
 app.set('view engine', 'hbs');
-app.set('views', path.join(__dirname, 'resources/views'));
+app.set('views', path.join(__dirname, 'resources', 'views'));
 //console.log('PATH: ', path.join(__dirname, 'resources/views'));
 
 // Routes init
